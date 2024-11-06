@@ -1,0 +1,16 @@
+# 어플리케이션 포트 -> 디폴트가 8080
+server:
+  port: 8080
+
+# database 연동 설정
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/inconnectDB?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: inconnect
+    password: inconnect
+
+# mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  config-location: classpath:mybatis-config.xml
