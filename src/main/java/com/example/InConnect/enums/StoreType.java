@@ -1,5 +1,5 @@
 package com.example.InConnect.enums;
 
-public enum StoreCategoryType {
+public enum StoreType {
     CAFE, RESTAURANT, BAR, BAKERY, DESSERT
 }

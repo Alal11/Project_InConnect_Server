@@ -18,6 +18,14 @@ public class SignUpDTO {
     private GenderType genderType;
     private LocalDate birthDate;
     private String region;
-    private UserType userType;  // MERCHANT, INFLUENCER
 
+    public SignUpDTO(String username, String password, String email, GenderType genderType,
+                     LocalDate birthDate, String region) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.genderType = genderType;
+        this.birthDate = birthDate;
+        this.region = region;
+    }
 }

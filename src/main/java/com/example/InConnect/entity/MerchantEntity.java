@@ -1,7 +1,7 @@
 package com.example.InConnect.entity;
 
 import com.example.InConnect.enums.GenderType;
-import com.example.InConnect.enums.StoreCategoryType;
+import com.example.InConnect.enums.StoreType;
 import com.example.InConnect.enums.UserType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -23,21 +23,21 @@ import java.time.LocalDate;
 public class MerchantEntity extends UserEntity {
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private StoreCategoryType storeCategoryType;  // 가게 카테고리 (CAFE, RESTAURANT, BAR, BAKERY, DESSERT)
+    @Column(name = "store_type", nullable = false, length = 20)
+    private StoreType storeType;  // 가게 카테고리 (CAFE, RESTAURANT, BAR, BAKERY, DESSERT)
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "store_name", nullable = false, length = 50)
     private String storeName;  // 가게 이름
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "store_address", nullable = false, length = 100)
     private String storeAddress;  // 가게 주소
 
-    @Builder(builderMethodName = "merchantBuilder")
+    @Builder
     public MerchantEntity(String username, String password, String email,
                           GenderType genderType, LocalDate birthdate, String region,
-                          StoreCategoryType storeCategoryType, String storeName, String storeAddress) {
+                          StoreType storeType, String storeName, String storeAddress) {
         super(username, password, email, genderType, birthdate, region, UserType.MERCHANT);
-        this.storeCategoryType = storeCategoryType;
+        this.storeType = storeType;
         this.storeName = storeName;
         this.storeAddress = storeAddress;
     }

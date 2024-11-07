@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+        }
+
+        .type-specific {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="text-center mb-4">회원가입</h2>
+
+    <!-- 회원 유형 선택 -->
+    <div class="form-group mb-4">
+        <label>회원 유형</label>
+        <div class="form-check">
+            <input type="radio" id="merchantType" name="userType" value="MERCHANT" class="form-check-input">
+            <label for="merchantType" class="form-check-label">소상공인</label>
+        </div>
+        <div class="form-check">
+            <input type="radio" id="influencerType" name="userType" value="INFLUENCER" class="form-check-input">
+            <label for="influencerType" class="form-check-label">인플루언서</label>
+        </div>
+    </div>
+
+    <!-- 공통 정보 -->
+    <form id="signupForm">
+        <div class="form-group">
+            <label>아이디 *</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label>비밀번호 *</label>
+            <input type="password" name="password" class="form-control" required>
+            <small class="text-muted">8자 이상, 영문/숫자/특수문자 포함</small>
+        </div>
+
+        <div class="form-group">
+            <label>이메일 *</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label>성별 *</label>
+            <select name="genderType" class="form-control" required>
+                <option value="">선택하세요</option>
+                <option value="MALE">남성</option>
+                <option value="FEMALE">여성</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>생년월일 *</label>
+            <input type="date" name="birthDate" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label>지역 *</label>
+            <input type="text" name="region" class="form-control" required>
+        </div>
+
+        <!-- 소상공인 전용 필드 -->
+        <div id="merchantFields" class="type-specific">
+            <div class="form-group">
+                <label>가게 유형 *</label>
+                <select name="storeType" class="form-control">
+                    <option value="">선택하세요</option>
+                    <option value="CAFE">카페</option>
+                    <option value="RESTAURANT">식당</option>
+                    <option value="BAR">술집</option>
+                    <option value="BAKERY">베이커리</option>
+                    <option value="DESSERT">디저트</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>가게 이름 *</label>
+                <input type="text" name="storeName" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>가게 주소 *</label>
+                <input type="text" name="storeAddress" class="form-control">
+            </div>
+        </div>
+
+        <!-- 인플루언서 전용 필드 -->
+        <div id="influencerFields" class="type-specific">
+            <div class="form-group">
+                <label>SNS 유형 *</label>
+                <select name="snsType" class="form-control">
+                    <option value="">선택하세요</option>
+                    <option value="INSTAGRAM">인스타그램</option>
+                    <option value="YOUTUBE">유튜브</option>
+                    <option value="BLOG">블로그</option>
+                    <option value="TIKTOK">틱톡</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>SNS URL *</label>
+                <input type="url" name="snsUrl" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>팔로워 수 *</label>
+                <input type="number" name="followerCount" class="form-control">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mb-3">회원가입</button>
+        <a href="/users/login" class="btn btn-link w-100">이미 계정이 있으신가요? 로그인하기</a>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // 회원 유형에 따른 필드 표시/숨김
+        $('input[name="userType"]').change(function () {
+            $('.type-specific').hide();
+            if (this.value === 'MERCHANT') {
+                $('#merchantFields').show();
+            } else if (this.value === 'INFLUENCER') {
+                $('#influencerFields').show();
+            }
+        });
+
+        // 폼 제출
+        $('#signupForm').submit(function (e) {
+            e.preventDefault();
+
+            // 회원 유형 가져오기
+            const userType = $('input[name="userType"]:checked').val();
+            if (!userType) {
+                alert('회원 유형을 선택해주세요.');
+                return;
+            }
+
+            // 공통 데이터
+            const formData = {
+                username: $('input[name="username"]').val(),
+                password: $('input[name="password"]').val(),
+                email: $('input[name="email"]').val(),
+                genderType: $('select[name="genderType"]').val(),
+                birthDate: $('input[name="birthDate"]').val(),
+                region: $('input[name="region"]').val()
+            };
+
+            // 회원 유형별 추가 데이터
+            if (userType === 'MERCHANT') {
+                Object.assign(formData, {
+                    storeType: $('select[name="storeType"]').val(),
+                    storeName: $('input[name="storeName"]').val(),
+                    storeAddress: $('input[name="storeAddress"]').val()
+                });
+            } else {
+                Object.assign(formData, {
+                    snsType: $('select[name="snsType"]').val(),
+                    snsUrl: $('input[name="snsUrl"]').val(),
+                    followerCount: parseInt($('input[name="followerCount"]').val())
+                });
+            }
+
+            console.log('전송할 데이터:', formData);
+
+            const url = userType === 'MERCHANT' ? '/users/merchants/signup' : '/users/influencers/signup';
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    console.log('성공 응답:', response);
+                    alert('회원가입이 완료되었습니다.');
+                    window.location.href = '/users/login';
+                },
+                error: function (xhr) {
+                    console.log('에러 응답:', xhr.responseJSON);
+                    alert('회원가입에 실패했습니다: ' + (xhr.responseJSON?.message || '알 수 없는 오류가 발생했습니다.'));
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

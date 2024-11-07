@@ -19,19 +19,20 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("INFLUENCER")  // 구분 컬럼에 입력될 값
+@Table(name = "influencer")
 public class InfluencerEntity extends UserEntity {
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(name = "sns_type", nullable = false, length = 20)
     private SnsType snsType;  // SNS 유형 (YOUTUBE, INSTAGRAM, BLOG, TIKTOK)
 
-    @Column(nullable = false, length = 200)
+    @Column(name = "sns_url", nullable = false, length = 200)
     private String snsUrl;  // SNS 계정 URL
 
-    @Column(nullable = false)
+    @Column(name = "follower_count", nullable = false)
     private Integer followerCount;  // 팔로워 수
 
-    @Builder(builderMethodName = "influencerBuilder")
+    @Builder
     public InfluencerEntity(String username, String password, String email,
                             GenderType genderType, LocalDate birthdate, String region,
                             SnsType snsType, String snsUrl, Integer followerCount) {
