@@ -145,6 +145,30 @@ public class UserService {
         );
     }
 
+    /**
+     * 회원 탈퇴
+     */
+    private String getLoginUsername(HttpSession session) {  // 현재 로그인된 사용자의 username 가져오기
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
+        return username;
+    }
+
+    @Transactional
+    public void withdraw(HttpSession session) {
+        String username = getLoginUsername(session);
+        UserEntity user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        userRepository.delete(user);
+        session.invalidate();
+    }
+
+    public void logout(HttpSession session) {
+        session.invalidate();
+    }
+
 
     // 아이디, 이메일 중복 검사
     private void validateDuplicateMember(SignUpDTO signupDTO) {

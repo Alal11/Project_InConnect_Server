@@ -90,4 +90,21 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * 회원 탈퇴
+     */
+    @DeleteMapping("/me")
+    @ResponseBody
+    public ResponseEntity<Void> withdraw(HttpSession session) {
+        userService.withdraw(session);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/logout")
+    @ResponseBody
+    public ResponseEntity<Void> logout(HttpSession session) {
+        userService.logout(session);
+        return ResponseEntity.ok().build();
+    }
+
 }
