@@ -57,4 +57,10 @@ public abstract class UserEntity {
         this.region = region;
         this.userType = userType;
     }
+
+    public void updateBasicInfo(String password, String email, String region) {
+        if (password != null) this.password = password;
+        if (email != null) this.email = email;
+        if (region != null) this.region = region;
+    }
 }

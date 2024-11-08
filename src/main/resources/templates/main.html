@@ -10,9 +10,20 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
         <a class="navbar-brand" href="#">InConnect</a>
-        <div class="navbar-text">
-            환영합니다, <span id="username"></span>
-            (<span id="userType"></span>)님!
+        <div class="ml-auto">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="userDropdown" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    <span id="username"></span>
+                    (<span id="userType"></span>)님
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="/users/update">회원정보 수정</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" id="logoutBtn">로그아웃</a>
+                    <a class="dropdown-item text-danger" href="#" id="withdrawBtn">회원 탈퇴</a>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
@@ -23,6 +34,8 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function () {
         const username = localStorage.getItem('username');
@@ -34,6 +47,40 @@
         } else {
             window.location.href = '/users/login';
         }
+
+        // 로그아웃 처리
+        $('#logoutBtn').click(function () {
+            $.ajax({
+                url: '/users/logout',
+                type: 'POST',
+                success: function () {
+                    localStorage.clear();  // 또는 removeItem 두 번 써도 됨
+                    window.location.href = '/users/login';
+                },
+                error: function (xhr) {
+                    alert('로그아웃 중 오류가 발생했습니다.');
+                }
+            });
+        });
+
+        // 회원 탈퇴
+        $('#withdrawBtn').click(function () {
+            if (confirm('정말 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+                $.ajax({
+                    url: '/users/me',
+                    type: 'DELETE',
+                    success: function () {
+                        alert('회원 탈퇴가 완료되었습니다.');
+                        localStorage.clear();
+                        window.location.href = '/users/login';
+                    },
+                    error: function (xhr) {
+                        alert('회원 탈퇴에 실패했습니다: ' +
+                            (xhr.responseJSON?.message || '알 수 없는 오류가 발생했습니다.'));
+                    }
+                });
+            }
+        });
     });
 </script>
 </body>
