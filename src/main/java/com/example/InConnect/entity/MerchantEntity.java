@@ -41,4 +41,13 @@ public class MerchantEntity extends UserEntity {
         this.storeName = storeName;
         this.storeAddress = storeAddress;
     }
+
+    public void updateStoreInfo(StoreType storeType, String storeName, String storeAddress) {
+        if (storeType != null)
+            this.storeType = storeType;
+        if (storeName != null)
+            this.storeName = storeName;
+        if (storeAddress != null)
+            this.storeAddress = storeAddress;
+    }
 }

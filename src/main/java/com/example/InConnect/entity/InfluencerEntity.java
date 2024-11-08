@@ -41,4 +41,10 @@ public class InfluencerEntity extends UserEntity {
         this.snsUrl = snsUrl;
         this.followerCount = followerCount;
     }
+
+    public void updateSnsInfo(SnsType snsType, String snsUrl, Integer followerCount) {
+        if (snsType != null) this.snsType = snsType;
+        if (snsUrl != null) this.snsUrl = snsUrl;
+        if (followerCount != null) this.followerCount = followerCount;
+    }
 }
