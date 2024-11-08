@@ -1,10 +1,9 @@
 package com.example.InConnect.service;
 
-import com.example.InConnect.dto.InfluencerSignUpDTO;
-import com.example.InConnect.dto.MerchantSignUpDTO;
-import com.example.InConnect.dto.SignUpDTO;
+import com.example.InConnect.dto.*;
 import com.example.InConnect.entity.InfluencerEntity;
 import com.example.InConnect.entity.MerchantEntity;
+import com.example.InConnect.entity.UserEntity;
 import com.example.InConnect.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +38,28 @@ public class UserService {
         InfluencerEntity influencerEntity = influencerSignUpDTO.toEntity();
         userRepository.save(influencerEntity);
         return influencerEntity.getId();
+    }
+
+
+    /**
+     * 로그인
+     */
+    @Transactional
+    public LoginResponseDTO login(LoginDTO loginDTO) {
+        UserEntity userEntity = userRepository.findByUsername(loginDTO.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다."));
+
+        if (!userEntity.getPassword().equals(loginDTO.getPassword())) {
+            throw new IllegalArgumentException("아이디 또는 비밀번호가 일치하지 않습니다.");
+        }
+
+        String userType = userEntity instanceof MerchantEntity ? "소상공인" : "인플루언서";
+
+        return LoginResponseDTO.builder()
+                .username(userEntity.getUsername())
+                .userType(userType)
+                .message("로그인 성공")
+                .build();
     }
 
 
