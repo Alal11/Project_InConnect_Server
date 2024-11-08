@@ -50,17 +50,22 @@
                 password: $('input[name="password"]').val()
             };
 
+            console.log('전송하는 데이터:', formData); // 전송 데이터 확인
+
             $.ajax({
                 url: '/users/login',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(formData),
                 success: function (response) {
-                    localStorage.setItem('token', response);
-                    alert('로그인이 완료되었습니다.');
-                    window.location.href = '/'; // 메인 페이지로 이동
+                    console.log('서버 응답:', response); // 서버 응답 확인
+                    localStorage.setItem('username', response.username);
+                    localStorage.setItem('userType', response.userType);
+                    alert(response.message);
+                    window.location.href = '/main';
                 },
                 error: function (xhr) {
+                    console.log('에러 응답:', xhr); // 에러 응답 확인
                     alert('로그인에 실패했습니다: ' + (xhr.responseJSON?.message || '아이디 또는 비밀번호를 확인해주세요.'));
                 }
             });
